@@ -1,0 +1,48 @@
+name: perfect_date_date_guide
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  grock: ^0.3.3
+  flutter_riverpod:
+  riverpod:
+  flutter_svg:
+  animated_text_kit:
+  video_player:
+  cupertino_icons:
+  flutter_launcher_icons:
+  google_mobile_ads:
+  provider:
+  google_fonts:
+  url_launcher:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  assets:
+    - assets/image/
+    - assets/icon/
+    - assets/fonts/
+
+  fonts:
+    - family: Nanum
+      fonts:
+        - asset: assets/fonts/NanumBrushScript-Regular.ttf
+    - family: Tech
+      fonts:
+        - asset: assets/fonts/ShareTech-Regular.ttf
+
+uses-material-design: true
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "assets/icon/date_picker_logo.png"
