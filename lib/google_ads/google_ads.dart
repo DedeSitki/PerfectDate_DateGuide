@@ -3,9 +3,12 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class GoogleAds {
   InterstitialAd? _interstitialAd;
   BannerAd? _bannerAd;
+  bool isNativeLoaded = false;
+  NativeAd? _nativeAd;
 
   BannerAd? get bannerAd => _bannerAd;
   InterstitialAd? get interstitialAd => _interstitialAd;
+  NativeAd? get nativeAd => _nativeAd;
 
   void loadInterstitialAd({bool showAfterLoad = false}) {
     InterstitialAd.load(
@@ -18,7 +21,6 @@ class GoogleAds {
         },
         onAdFailedToLoad: (LoadAdError error) {
           _interstitialAd = null;
-          // Retry loading the ad after a delay
           Future.delayed(const Duration(seconds: 30), () {
             loadInterstitialAd(showAfterLoad: showAfterLoad);
           });
@@ -34,7 +36,6 @@ class GoogleAds {
     }
   }
 
-  // Loads a banner ad.
   void loadBannerAd() {
     _bannerAd = BannerAd(
       adUnitId: 'ca-app-pub-5435445217624462/1753543406',
@@ -53,8 +54,33 @@ class GoogleAds {
     )..load();
   }
 
+  void loadNativeAd({required Function onNativeAdLoaded, required Function onNativeAdFailed}) {
+    _nativeAd = NativeAd(
+      adUnitId: "ca-app-pub-5435445217624462/4354540021",
+      nativeTemplateStyle: NativeTemplateStyle(templateType: TemplateType.medium),
+      listener: NativeAdListener(
+        onAdLoaded: (ad) {
+          isNativeLoaded = true;
+          onNativeAdLoaded();
+        },
+        onAdFailedToLoad: (ad, error) {
+          onNativeAdFailed();
+          _nativeAd?.dispose();
+          _nativeAd = null;
+          Future.delayed(const Duration(seconds: 30), () => loadNativeAd(onNativeAdLoaded: onNativeAdLoaded, onNativeAdFailed: onNativeAdFailed));
+        },
+      ),
+      request: const AdManagerAdRequest(),
+    );
+
+    _nativeAd?.load();
+  }
+
+
+
   void dispose() {
     _interstitialAd?.dispose();
     _bannerAd?.dispose();
+    _nativeAd?.dispose();
   }
 }
